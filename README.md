@@ -1,21 +1,33 @@
-# todo.txt format
-[![Gitter](https://img.shields.io/gitter/room/todotxt/todotxt.svg)](https://gitter.im/todotxt/todotxt)
+# todo.txt.d format
 
-A complete primer on the whys and hows of todo.txt.
+A complete primer on the whys and hows of todo.txt.d.
 
-The first and most important rule of todo.txt:
+> This is a fork of the original [todo.txt specification](https://github.com/todotxt/todo.txt), adapted to be Syncthing-friendly. The task syntax remains identical to todo.txt. The key change is the storage model: instead of a single `todo.txt` file, tasks are stored as individual files inside a `todo.txt.d/` directory. This eliminates most sync conflicts when using file-based synchronization tools like [Syncthing](https://syncthing.net/), because independent changes on different devices touch different files.
 
-> A single line in your todo.txt text file represents a single task.
+The first and most important rule of todo.txt.d:
+
+> Tasks are stored as `.txt` files in your `todo.txt.d/` directory.
+
+It is recommended that each file contains a single task for maximum sync-friendliness. A file may also contain multiple tasks (one per line). See [Storage Format](#storage-format) for details.
 
 
 ## Why plain text?
 
 Plain text is software and operating system agnostic. It's searchable, portable, lightweight, and easily manipulated. It's unstructured. It works when someone else's web server is down or your Outlook .PST file is corrupt. There's no exporting and importing, no databases or tags or flags or stars or prioritizing or _insert company name here_-induced rules on what you can and can't do with it.
 
+Tasks can be created and read with any plain text editor - no special tools required. This is a core principle inherited from todo.txt.
+
+
+## Why a directory?
+
+When multiple devices edit the same `todo.txt` file independently, file-based sync tools like Syncthing produce conflicts - even when the changes are completely unrelated (e.g., adding different tasks on different devices).
+
+By storing each task as its own file inside a `todo.txt.d/` directory, independent changes touch different files. Syncthing syncs them without conflict. The only remaining conflict scenario is editing the *same* task on two devices simultaneously, which is far less common.
+
 
 ## The 3 axes of an effective todo list
 
-Using special notation in todo.txt, you can create a list that's sliceable by 3 key axes.
+Using special notation in todo.txt.d, you can create a list that's sliceable by 3 key axes.
 
 
 ### Priority
@@ -23,7 +35,7 @@ Your todo list should be able to tell you what's the next most important thing f
 
 
 ### Project
-The only way to move a big project forward is to tackle a small subtask associated with it. Your `todo.txt` should be able to list out all the tasks specific to a project.
+The only way to move a big project forward is to tackle a small subtask associated with it. Your todo list should be able to list out all the tasks specific to a project.
 
 In order to move along a project like "Cleaning out the garage," my task list should give me the next logical action to take in order to move that project along. "Clean out the garage" isn't a good todo item; but "Call Goodwill to schedule pickup" in the "Clean out garage" project is.
 
@@ -33,17 +45,16 @@ In order to move along a project like "Cleaning out the garage," my task list sh
 
 That way, when you've got a few minutes in the car with your cell phone, you can easily check your `@phone` tasks and make a call or two while you have the opportunity.
 
-This is all possible inside `todo.txt`.
+This is all possible inside todo.txt.d.
 
 
-
-## `todo.txt` format rules
+## Task format rules
 
 <img src="./description.svg" width="100%" height="500">
 
-Your `todo.txt` is a plain text file. To take advantage of structured task metadata like priority, projects, context, creation, and completion date, there are a few simple but flexible file format rules.
+Each task in todo.txt.d is a single line of plain text. The task syntax is identical to the [original todo.txt format](https://github.com/todotxt/todo.txt). To take advantage of structured task metadata like priority, projects, context, creation, and completion date, there are a few simple but flexible format rules.
 
-Philosophically, the `todo.txt` file format has two goals:
+Philosophically, the todo.txt.d format has two goals:
 
 - The file contents should be human-readable without requiring any tools other than a plain text viewer or editor.
 - A user can manipulate the file contents in a plain text editor in sensible, expected ways. For example, a text editor that can sort lines alphabetically should be able to sort your task list in a meaningful way.
@@ -55,15 +66,18 @@ Here are the rest.
 
 ## Incomplete Tasks: 3 Format Rules
 
-The beauty of todo.txt is that it's completely unstructured; the fields you can attach to each task are only limited by your imagination. To get started, use special notation to indicate task context (e.g. `@phone` ), project (e.g. `+GarageSale` ) and priority (e.g. `(A)` ).
+The beauty of todo.txt.d is that it's completely unstructured; the fields you can attach to each task are only limited by your imagination. To get started, use special notation to indicate task context (e.g. `@phone` ), project (e.g. `+GarageSale` ) and priority (e.g. `(A)` ).
 
-A todo.txt file might look like the following:
+A todo.txt.d directory might contain a file with:
 
 ```
 (A) Thank Mom for the meatballs @phone
+```
+
+And another file with:
+
+```
 (B) Schedule Goodwill pickup +GarageSale @phone
-Post signs around the neighborhood +GarageSale
-@GroceryStore pies
 ```
 
 A search and filter for the `@phone` contextual items would output:
@@ -80,7 +94,7 @@ To just see the `+GarageSale` project items would output:
 Post signs around the neighborhood +GarageSale
 ```
 
-There are three formatting rules for current todo's.
+There are three formatting rules for current tasks.
 
 ### Rule 1: If priority exists, it ALWAYS appears first.
 
@@ -180,7 +194,7 @@ For example:
 x 2011-03-02 2011-03-01 Review Tim's pull request +TodoTxtTouch @github
 ```
 
-If you’ve prepended the creation date to your task, on completion it will appear directly after the completion date. This is so your completed tasks sort by date using standard sort tools. Many Todo.txt clients discard priority on task completion. To preserve it, use the `key:value` format described below (e.g. `pri:A`)
+If you've prepended the creation date to your task, on completion it will appear directly after the completion date. This is so your completed tasks sort by date using standard sort tools. Many todo.txt.d clients discard priority on task completion. To preserve it, use the `key:value` format described below (e.g. `pri:A`)
 
 With the completed date (required), if you've used the prepended date (optional), you can calculate how many days it took to complete a task.
 
@@ -194,3 +208,66 @@ Developers should use the format `key:value` to define additional metadata (e.g.
 
 Both `key` and `value` must consist of non-whitespace characters, which are not colons. Only one colon separates the `key` and `value`.
 
+
+
+## Storage Format
+
+The storage format is what distinguishes todo.txt.d from the original todo.txt specification.
+
+### The `todo.txt.d/` directory
+
+Tasks are stored as `.txt` files inside a `todo.txt.d/` directory.
+
+```
+todo.txt.d/
+|-- call-mom.txt
+|-- buy-groceries.txt
+|-- schedule-pickup.txt
++-- done.txt.d/
+    |-- fix-bike.txt
+    +-- pay-bills.txt
+```
+
+### File content
+
+Each `.txt` file contains one or more tasks, one task per line, using the task format rules described above.
+
+**Recommended**: One task per file. This maximizes the sync benefit - each task is an independent file that can be added, modified, or deleted without affecting other tasks.
+
+**Allowed**: Multiple tasks per file (one per line). A traditional `todo.txt` file placed inside the directory is valid. However, this does not provide the sync conflict-reduction benefit, since multiple devices editing the same multi-task file will still conflict.
+
+### File naming
+
+Any unique filename with a `.txt` extension is valid.
+
+When creating tasks manually with a text editor, any descriptive name works:
+
+```
+call-mom.txt
+buy-groceries.txt
+schedule-goodwill-pickup.txt
+```
+
+**Recommended for apps and tools**: Use [ULID](https://github.com/ulid/spec) filenames (e.g., `01ARZ3NDEKTSV4RRFFQ69G5FAV.txt`) to guarantee uniqueness across devices and provide chronological sorting. ULIDs are universally unique without requiring coordination between devices, and they are lexicographically sortable by creation time.
+
+### The `done.txt.d/` subdirectory
+
+Completed tasks are moved from `todo.txt.d/` to `todo.txt.d/done.txt.d/`.
+
+- The file retains its original filename.
+- The task content is updated with the `x` completion marker and completion date, following the complete task format rules above.
+- This keeps the active task directory lean and focused on open tasks.
+- `done.txt.d/` is nested inside `todo.txt.d/` so that there is a single root directory to sync and to grant application permissions to.
+
+### Deleting a task
+
+To delete a task, simply delete the file. If the file contains multiple tasks, remove the corresponding line.
+
+### Task ordering
+
+Applications should present tasks ordered by priority first, then by creation date or filename.
+
+
+## Planned Features
+
+- **Subtask support**: Planned for inclusion in a later stage of development.
