@@ -248,7 +248,7 @@ buy-groceries.txt
 schedule-goodwill-pickup.txt
 ```
 
-**Recommended for apps and tools**: Use [ULID](https://github.com/ulid/spec) filenames (e.g., `01ARZ3NDEKTSV4RRFFQ69G5FAV.txt`) to guarantee uniqueness across devices and provide chronological sorting. ULIDs are universally unique without requiring coordination between devices, and they are lexicographically sortable by creation time.
+The filename is arbitrary — use whatever naming scheme suits your workflow.
 
 ### The `done.txt.d/` subdirectory
 

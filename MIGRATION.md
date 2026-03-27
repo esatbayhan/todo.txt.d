@@ -11,14 +11,14 @@ This document describes the differences between todo.txt.d and the original [tod
 | **Task syntax** | One line = one task | Identical — unchanged from todo.txt |
 | **Multi-task files** | The entire file is multi-task by design | Allowed but not recommended (reduces sync benefit) |
 | **Archival** | Informal (some clients use a `done.txt` file) | Formalized as `todo.txt.d/done.txt.d/` subdirectory |
-| **File naming** | N/A (single file) | Flexible; any `.txt` filename is valid. ULID recommended for apps/tools |
+| **File naming** | N/A (single file) | Flexible; any `.txt` filename is valid |
 | **Sync friendliness** | Conflicts when multiple devices edit the file independently | Conflict-free for independent task additions/edits across devices |
 
 ### What changed
 
 - **Storage model**: The single `todo.txt` file is replaced by a `todo.txt.d/` directory. Each task is stored as an individual `.txt` file. This is the core change that enables conflict-free syncing.
 - **Archival**: Completed tasks are moved to `todo.txt.d/done.txt.d/`, a subdirectory inside the main task directory. This is now a formal part of the specification, whereas todo.txt left archival as an informal convention.
-- **File naming convention**: Since tasks are individual files, a naming convention is needed. Any unique `.txt` filename is valid. For applications and tools, [ULID](https://github.com/ulid/spec) filenames are recommended to guarantee cross-device uniqueness and chronological sorting.
+- **File naming convention**: Since tasks are individual files, a naming convention is needed. Any `.txt` filename is valid — the name is arbitrary.
 
 ### What stayed the same
 
@@ -55,7 +55,7 @@ while IFS= read -r line; do
 done < todo.txt
 ```
 
-This creates files like `task-0001.txt`, `task-0002.txt`, etc. Applications that manage these files should rename them to ULIDs for long-term uniqueness.
+This creates files like `task-0001.txt`, `task-0002.txt`, etc. The filenames are arbitrary — use whatever naming scheme suits your workflow.
 
 ### From `done.txt` to `done.txt.d/`
 
@@ -85,6 +85,23 @@ For completed tasks:
 cat todo.txt.d/done.txt.d/*.txt > done.txt
 ```
 
-### Python migration scripts
+### Python migration script
 
-Python migration scripts are planned for a later stage of development.
+A Python migration script is provided as `migrate.py`. It requires Python 3 and has no external dependencies.
+
+**Convert todo.txt to todo.txt.d/**:
+
+```sh
+python3 migrate.py to-d todo.txt
+python3 migrate.py to-d todo.txt -d done.txt          # include done.txt
+python3 migrate.py to-d todo.txt -o my-tasks.d         # custom output directory
+```
+
+**Convert todo.txt.d/ back to todo.txt**:
+
+```sh
+python3 migrate.py from-d todo.txt.d
+python3 migrate.py from-d todo.txt.d -o my-todo.txt    # custom output file
+```
+
+Run `python3 migrate.py -h` for full usage details.
