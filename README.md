@@ -137,6 +137,7 @@ This task doesn't have a creation date:
 
 - A *context* is preceded by a single space and an at-sign (`@`).
 - A *project* is preceded by a single space and a plus-sign (`+`).
+- A *project* or *context* token may also appear at the very start of a task's description, without a preceding space.
 - A *project* or *context* contains any non-whitespace character.
 - A *task* may have zero, one, or more than one *projects* and *contexts* included in it.
 
@@ -209,6 +210,33 @@ Developers should use the format `key:value` to define additional metadata (e.g.
 Both `key` and `value` must consist of non-whitespace characters, which are not colons. Only one colon separates the `key` and `value`.
 
 
+### Date keys
+
+The following date keys are defined by this specification. All date values **must** use the `YYYY-MM-DD` format. Relative or human-readable values (e.g. `today`, `next week`, `tomorrow`) are not valid — implementations must not accept or produce them.
+
+#### `due:YYYY-MM-DD`
+
+The deadline for the task — it should be completed no later than this date.
+
+```
+(A) 2024-01-15 Submit tax return due:2024-04-15
+```
+
+#### `scheduled:YYYY-MM-DD`
+
+The date on which the task is scheduled.
+
+```
+2024-03-01 Prepare quarterly report scheduled:2024-03-20 due:2024-03-31
+```
+
+#### `starting:YYYY-MM-DD`
+
+The earliest date on which the task becomes relevant or actionable.
+
+```
+Buy birthday gift for Alice starting:2024-06-01 due:2024-06-10
+```
 
 ## Storage Format
 
@@ -263,11 +291,3 @@ Completed tasks are moved from `todo.txt.d/` to `todo.txt.d/done.txt.d/`.
 
 To delete a task, simply delete the file. If the file contains multiple tasks, remove the corresponding line.
 
-### Task ordering
-
-Applications should present tasks ordered by priority first, then by creation date or filename.
-
-
-## Planned Features
-
-- **Subtask support**: Planned for inclusion in a later stage of development.
