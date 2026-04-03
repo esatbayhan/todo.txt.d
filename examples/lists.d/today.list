@@ -1,0 +1,11 @@
+---
+name: Today
+icon: 📅
+order: 1
+---
+due <= today
+OR
+scheduled <= today
+
+sort by priority desc
+sort by due asc

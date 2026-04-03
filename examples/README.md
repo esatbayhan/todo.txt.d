@@ -44,3 +44,23 @@ Both `valid/` and `edge-cases/` are spec-compliant directories: they contain onl
 | `invalid/completion-date-missing.txt` | invalid | lenient parsing: `x` without a date; parsed as incomplete task |
 | `invalid/creation-date-wrong-format.txt` | invalid | lenient parsing: `01-15-2024` is not `YYYY-MM-DD` format (year must come first); token stays in description |
 | `invalid/malformed-first-due-key-blocks-valid-second.txt` | invalid | lenient parsing + duplicate keys: malformed first `due:` consumes the key; valid-looking second `due:` stays in description |
+
+## Smart List Fixtures
+
+The `lists.d/` directory contains fixture files for testing smart list
+(`.list` format) implementations. See `LISTS.md` for the full specification.
+
+- **`lists.d/`** — Spec-compliant list definitions. A conforming parser must parse each file without errors and produce the filter/directive structures documented below.
+- **`lists.d/invalid/`** — Inputs that trigger lenient parsing. A conforming parser must not throw or abort.
+
+| File | Category | Spec Rule |
+|------|----------|-----------|
+| `lists.d/today.list` | valid | DNF with OR: two blocks, date comparison `due <= today` and `scheduled <= today`, sort directives |
+| `lists.d/inbox.list` | valid | AND block: three existence filters `no due`, `no scheduled`, `no starting`, sort directives |
+| `lists.d/upcoming.list` | valid | DNF with OR: three blocks, date comparison `> today`, sort and group directives |
+| `lists.d/all.list` | valid | done filter: `not done`, sort directive |
+| `lists.d/high-priority-this-week.list` | valid | AND block: date offset `today + 7` with priority operator `above`, sort and group directives |
+| `lists.d/work-calls.list` | valid | AND block: text operators `includes` on project and context fields, sort directive |
+| `lists.d/invalid/missing-name.list` | invalid | lenient parsing: no `name` in frontmatter; frontend falls back to filename |
+| `lists.d/invalid/unknown-filter.list` | invalid | lenient parsing: unrecognized filter line skipped; valid filters still apply |
+| `lists.d/invalid/empty-body.list` | invalid | lenient parsing: no filter conditions; matches no tasks |

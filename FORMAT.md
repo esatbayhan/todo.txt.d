@@ -1,6 +1,6 @@
 # todo.txt.d Format Specification
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 ## Grammar
 
@@ -233,12 +233,21 @@ defined by this specification; `todo.txt.d` is a common convention.
 todo.txt.d/
 ├── call-mom.txt
 ├── buy-groceries.txt
+├── lists.d/
+│   └── today.list
 └── done.txt.d/
     └── fix-bike.txt
 ~~~
 
-`done.txt.d/` is the only subdirectory defined by this specification.
-No other subdirectories may be created inside the task directory.
+`done.txt.d/` and `lists.d/` are the only subdirectories defined by this
+specification. No other subdirectories may be created inside the task
+directory.
+
+### The lists.d/ subdirectory
+
+Smart list definitions are stored in a `lists.d/` subdirectory as `.list`
+files. See `LISTS.md` for the full specification of the filter format.
+Frontends that do not support smart lists can safely ignore this directory.
 
 ### File content
 

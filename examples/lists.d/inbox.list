@@ -1,0 +1,11 @@
+---
+name: Inbox
+icon: 📥
+order: 2
+---
+no due
+no scheduled
+no starting
+
+sort by priority desc
+sort by creation_date asc

@@ -251,6 +251,9 @@ todo.txt.d/
 |-- call-mom.txt
 |-- buy-groceries.txt
 |-- schedule-pickup.txt
+|-- lists.d/
+|   |-- today.list
+|   +-- inbox.list
 +-- done.txt.d/
     |-- fix-bike.txt
     +-- pay-bills.txt
@@ -290,4 +293,30 @@ Completed tasks are moved from `todo.txt.d/` to `todo.txt.d/done.txt.d/`.
 ### Deleting a task
 
 To delete a task, simply delete the file. If the file contains multiple tasks, remove the corresponding line.
+
+## Smart Lists
+
+Smart lists are user-defined filter views stored as `.list` files in a `lists.d/` subdirectory. They allow you to define filtered views of your tasks — like "Today", "Inbox", or "Upcoming" — that work consistently across all frontends and devices.
+
+Each `.list` file has a small header (name, icon, sort order) and a filter body:
+
+~~~
+---
+name: Today
+icon: 📅
+order: 1
+---
+due <= today
+OR
+scheduled <= today
+
+sort by priority desc
+sort by due asc
+~~~
+
+Filter lines within a block are AND'd together. Blocks separated by `OR` are OR'd. This gives you flexible filtering with a format that's trivial to parse.
+
+Date comparisons support relative offsets: `today + 7` means "7 days from now", `today - 14` means "14 days ago".
+
+See `LISTS.md` for the complete filter format specification.
 

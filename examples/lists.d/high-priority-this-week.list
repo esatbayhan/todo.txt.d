@@ -1,0 +1,10 @@
+---
+name: This Week (Priority)
+icon: 🔥
+order: 5
+---
+due <= today + 7
+priority above C
+
+sort by due asc
+group by priority

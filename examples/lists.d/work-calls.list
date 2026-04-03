@@ -1,0 +1,9 @@
+---
+name: Work Calls
+icon: 📞
+order: 6
+---
+project includes Work
+context includes phone
+
+sort by priority desc

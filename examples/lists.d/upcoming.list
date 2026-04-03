@@ -1,0 +1,13 @@
+---
+name: Upcoming
+icon: 📆
+order: 3
+---
+due > today
+OR
+scheduled > today
+OR
+starting > today
+
+sort by due asc
+group by due
